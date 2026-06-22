@@ -127,7 +127,8 @@ pip install transformers   # per Qwen3-VL
 ---
 
 ## Download Dataset
-<a href="[https://example.com](https://drive.google.com/drive/folders/1SIr9uJv4uuyN2d9pdLvANSsOUdl3IbeF?usp=sharing)">
+
+<a href="https://drive.google.com/drive/folders/1SIr9uJv4uuyN2d9pdLvANSsOUdl3IbeF?usp=sharing">
   <button>SAGE-Face</button>
 </a>
 
