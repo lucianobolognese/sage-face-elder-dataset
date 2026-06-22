@@ -81,31 +81,22 @@ Il modello è vincolato a una risposta binaria **(YES / NO)**. Tutte le immagini
 
 ```
 ├── pipeline/
-│   ├── frame_extractor.py          # Estrazione Frame 8 da sequenze video
-│   ├── semantic_decision_engine.py # Motore di Decisione Semantica (ElderReact)
-│   ├── age_screening.py            # Filtro demografico con DeepFace (soglia 38 anni)
-│   ├── vlm_gatekeeper.py           # Validazione binaria con Qwen3-VL
-│   └── merge_and_normalize.py      # Aggregazione sorgenti + mappatura etichette Ekman
+│   ├── 01_preprocess.py        # Preprocessing sorgenti statiche: normalizzazione
+│   │                           # etichette, resize, costruzione Master CSV
+│   ├── 02_Sage_Builder_Dynamic.py  # Estrazione Frame 8 da DFEW ed ElderReact
+│   │                               # + Motore di Decisione Semantica (Valenza)
+│   ├── 03_pulizia_llm.py       # Gatekeeper VLM: validazione binaria con Qwen3-VL
+│   │                           # su tutti i campioni non certificati anagraficamente
+│   ├── 04_rescue_anziani.py    # Recupero falsi negativi: re-ispezione campioni
+│   │                           # borderline scartati dal filtro DeepFace
+│   ├── 05_resize_llm.py        # Resize finale a 224×224 px dei campioni validati
+│   ├── 06_split_data.py        # Split stratificato train/test (80/20)
+│   │                           # con random state fisso per riproducibilità
+│   ├── 07_reforgesage.py       # Aggregazione finale: fusione di tutte le sorgenti
+│   │                           # nel dataset SAGE-Face completo
+│   └── 08_analyze.py           # Analisi distribuzione classi, statistiche
+│                               # e validazione integrità del dataset
 │
-├── benchmark/
-│   ├── inference_pipeline.py       # Inferenza unificata per tutti i framework
-│   ├── label_normalization.py      # Normalizzazione spazio etichette
-│   └── results/                    # Tabelle accuracy / precision / F1
-│
-├── gradcam/
-│   ├── gradcam_analysis.py         # Hook PyTorch su features_extractor.blocks.4/5
-│   └── visualize.py                # Overlay heatmap JET su immagini originali
-│
-├── finetuning/
-│   ├── dataset_builder.py          # Aggregazione dataset per fine-tuning
-│   ├── augmentation.py             # Albumentations + Specific Erasing (OpenCV)
-│   ├── train.py                    # AdamW + CosineAnnealingLR + Early Stopping
-│   ├── cross_validation.py         # 5-Fold Cross Validation
-│   └── eval.py                     # Valutazione cross-dataset post fine-tuning
-│
-└── notebooks/
-    ├── benchmark_analysis.ipynb    # Visualizzazione risultati benchmark
-    └── finetuning_results.ipynb    # Curve training, confusion matrix, Grad-CAM
 ```
 
 ---
@@ -134,6 +125,11 @@ pip install transformers   # per Qwen3-VL
 ```
 
 ---
+
+## Download Dataset
+<a href="[https://example.com](https://drive.google.com/drive/folders/1SIr9uJv4uuyN2d9pdLvANSsOUdl3IbeF?usp=sharing)">
+  <button>SAGE-Face</button>
+</a>
 
 ## Citazione
 
